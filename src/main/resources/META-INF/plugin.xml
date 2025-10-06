@@ -1,0 +1,22 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.github.raystatic.commitgeniedevfesttemp</id>
+    <name>commit-genie-devfest-temp</name>
+    <vendor>raystatic</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <resource-bundle>messages.MyBundle</resource-bundle>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow factoryClass="com.github.raystatic.commitgeniedevfesttemp.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <postStartupActivity implementation="com.github.raystatic.commitgeniedevfesttemp.startup.MyProjectActivity" />
+    </extensions>
+
+    <actions>
+        <action id="Commit Genie"
+                class="com.github.raystatic.commitgeniedevfesttemp.CommitMessageAction"
+                text="Commit Genie"
+                description="Generate AI-based commit message for staged changes"/>
+    </actions>
+</idea-plugin>
