@@ -1,7 +1,10 @@
 package com.github.raystatic.commitgeniedevfesttemp
 
+import com.intellij.credentialStore.CredentialAttributes
+import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vcs.ProjectLevelVcsManager
 import com.intellij.openapi.vcs.changes.ChangeListManager
@@ -30,6 +33,42 @@ class CommitMessageAction : AnAction() {
             return
         }
 
+        val savedAPIKey = getSavedAPIKey()
+        val apiKey = if (savedAPIKey.isNullOrEmpty().not()) {
+            savedAPIKey
+        } else {
+            val key = promptForAPIKey(project)
+            saveAPIKey(key)
+            key
+        }
+
+        if (apiKey.isNullOrEmpty()) {
+            Messages.showErrorDialog(project, "API key is required", TAG)
+            return
+        } else {
+            Messages.showInfoMessage(project, "API key is set", TAG)
+            return
+        }
+
+    }
+
+    private fun saveAPIKey(key: String?){
+        val attributes = CredentialAttributes("com.commitgenie.apikey")
+        PasswordSafe.instance.setPassword(attributes, key)
+    }
+
+    private fun promptForAPIKey(project: Project): String? {
+        return Messages.showInputDialog(
+            project,
+            "Enter your OpenAI API Key",
+            "OpenAI API Key",
+            Messages.getQuestionIcon()
+        )
+    }
+
+    private fun getSavedAPIKey(): String? {
+        val attributes = CredentialAttributes("com.commitgenie.apikey")
+        return PasswordSafe.instance.getPassword(attributes)
     }
 
     private fun getGitDiff(gitRoot: String): String {
