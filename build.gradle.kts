@@ -34,7 +34,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.opentest4j)
 
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:okhttp:5.2.1")
 
     implementation("org.json:json:20231013")
 
